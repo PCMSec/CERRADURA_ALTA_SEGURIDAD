@@ -18,24 +18,24 @@ def elegirGrupo(grupo):
 		print("El grupo introducido no existe, usando el primo del grupo 15")
 		return primos[15]
 
-def generarPrivado(rangoMax):
+def generarClavePrivada(rangoMax):
 	return random.randint(1, rangoMax - 1)
 
-def generarPublico(valorPrivado, primo):
+def generarClavePublica(valorPrivado, primo):
 	return pow(2, valorPrivado, primo)
 
 def main():
     primo = elegirGrupo(15)
-    valorAlice = generarPrivado(primo)
-    valorBob = generarPrivado(primo)
+    valorAlice = generarClavePrivada(primo)
+    valorBob = generarClavePrivada(primo)
     print("Valor de Alice: ", valorAlice)
     print("Valor de Bob: ",valorBob)
 
     #calcular publicos a compartir
     print("Valor que Alice comparte")
-    publicoAlice = generarPublico(valorAlice, primo)
+    publicoAlice = generarClavePublica(valorAlice, primo)
     print("Valor que Bob comparte")
-    publicoBob = generarPublico(valorBob, primo)
+    publicoBob = generarClavePublica(valorBob, primo)
 
     #Calcular la clave final a la que se ha llegado
     finalAlice = pow(publicoBob, valorAlice, primo)
