@@ -89,10 +89,10 @@ def main():
     print("Binario del último Byte: ",final, "\n")
     final = int(final,2)
     final = int(final/2)
-    print("Valor en decimal :",final,"\n")
-
-    #test
-    final = 61
+    print("Valor en decimal del grupo de bits:",final*2,"\n")
+    print("Se elige el grupo",final,"\n")
+    #test correcto, comentar
+    #final = 61
     if final > 60:
     	final = 60
     modulo = resumenHmac[final*2:final*2+8]
