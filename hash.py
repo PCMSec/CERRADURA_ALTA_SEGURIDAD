@@ -1,4 +1,5 @@
-# script principal que calcula el hash de la clave diffie hellman
+# Script principal que calcula el hash-hmac de la clave diffie hellman
+# y luego genera la contraseña común con HOTP
 
 import hashlib
 import random
@@ -17,7 +18,8 @@ def imprimirPantallaGuardar():
 
 def generarInput():
     """Genera una ventana por tkinter para que el usuario introduzca
-    el grupo con el que operar. Posee botones para guardar y ejecutar el programa"""
+    el grupo con el que operar.
+    Posee botones para guardar y ejecutar el programa"""
     ventana = Tk()
     Label(ventana, text='Grupo con el que operar [15: 3072 bits, 16: 4096 bits, 17: 6144 bits, 18: 8192 bits] ').grid(row=0)
     global n
@@ -29,29 +31,31 @@ def generarInput():
     return n.get()	
 
 def hmac_sha512(clave, mensaje):
-    """devuelve el hmac con sha512 a partir de:
-    clave: clave de la comunicación entre DH
-    mensaje: contador de 8 Bytes generado al azar
+    """Devuelve el hmac con sha512 a partir de:
+    clave: clave de la comunicación entre DH,
+    mensaje: contador de 8 Bytes generado al azar,
     devuelve el resumen hmac"""
 
-    # se convierten la clave y el mensaje, que eran enteros, a un conjunto de bytes
+    # Se convierten la clave y el mensaje, que eran enteros, 
+    # a un conjunto de bytes con el que operar
     clave = bytes(str(clave), "UTF-8")
     mensaje = bytes(str(mensaje), "UTF-8")
 
-    #se devuelve el resultado del hmac
+    # Se devuelve el resultado del hmac
     digester = hmac.new(clave, mensaje, hashlib.sha512)
+
     print("Tamaño del HMAC resultante: ",digester.digest_size, " Bytes\n")
     return digester.hexdigest()
 
 def eliminarPrefijo(stringNumero):
-	"""quita el prefijo 0b de los Bytes que se introducen, los devuelve sin ella"""
+	"""Quita el prefijo 0b de los Bytes que se introducen"""
 	prefijo = "0b"
 	if stringNumero.startswith(prefijo):
 		return stringNumero[len(prefijo):]
 
 def calcularHOTP(contador, grupo):
-    """método que se encarga de calcular y devolver el HOTP"""
-    # guardamos un objeto con los parámetros a partir del grupo del primo elegido
+    """Método que se encarga de calcular y devolver el HOTP"""
+    # Guardamos un objeto con los parámetros a partir del grupo del primo elegido
     diffie = diffieHellman(grupo)
 
     # ¿Ambos usuarios presentan la misma clave final?
@@ -87,8 +91,8 @@ def calcularHOTP(contador, grupo):
     print("Binario del último Byte: ",final, "\n")
 
     # Pasar a decimal para calcular el grupo a elegir; se divide entre dos y
-    # se pasa a entero porque final puede ser la segunda parte del Byte,
-    # y queremos el inicio del grupo entero.
+    # se pasa a entero porque final puede ser la segunda parte del Byte (impar),
+    # y queremos el inicio del grupo entero (par).
     final = int(final,2)
     final = int(final/2)
     print("Valor en decimal del grupo de BITS resultante:",final*2,"\n")
@@ -109,15 +113,16 @@ def calcularHOTP(contador, grupo):
     modulo = int(modulo,16)
     print("Resultado decimal de los Bytes obtenidos:",modulo,"\n")
     
-    # Si el resulta tiene menos de 8 números, se añaden al final
-    # 0's hasta que haya 8.
+    # Si el resulta tiene menos de 8 números, se añaden al final tantos
+    # 0's como sean necesarios hasta que haya 8.
     while len(str(modulo)) <= 8:
         modulo *= 10
 
-    # Si el resulta tiene más de 8 números, se quitan al final
-    # valores hasta que haya 8.
+    # Si el resultado tiene más de 8 números, se quitan al final tantos
+    # valores como sean necesarios hasta que haya 8.
     while len(str(modulo)) > 8:
         modulo = modulo // 10
+
     # Se devuelve el valor de la contraseña en común entre usuario
     # y caja fuerte.
     print("Últimos 8 dígitos de la contraseña:",modulo,"\n")
@@ -125,10 +130,11 @@ def calcularHOTP(contador, grupo):
 
 
 def main():
-	# Semilla definida en cada inicio para obtener resultados consistentes, igual a 30
+	# Semilla definida en cada inicio para obtener resultados consistentes = 30
     random.seed(30)
 
-    # contador del sistema para sincronizar, tiene 8 Bytes aleatorios, como define el RFC de HOTP
+    # Contador del sistema para sincronizar, tiene 8 Bytes aleatorios,
+    # como define el RFC de HOTP
     # sirve como mensaje del que calcular el HMAC a partir de la clave común
     contador = random.getrandbits(64)
     print("El valor del contador es: ", contador,"\n")
@@ -139,15 +145,17 @@ def main():
     n = generarInput()
     print("\n")
     
-    # el valor no es numérico y devuelve un error
+    # El valor no es numérico y devuelve un error
     if not n.isdecimal():
     	print("Introduzca un valor numérico la próxima vez")
     	return -1
 
-    # genera todos los parámetros de DH a partir del primo del grupo,
+    # Genera todos los parámetros de DH a partir del primo del grupo,
     # los guarda en un objeto de tipo diffieHellman con todos los demás parámetros
     valorHOTP = calcularHOTP(contador, n)
     print(valorHOTP)
+
+    # TODO: ventana de resincronizacion y elementos similares
 
 if __name__ == "__main__":
     main()
