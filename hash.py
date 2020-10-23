@@ -4,6 +4,8 @@ import hashlib
 import random
 import hmac
 import sys
+import GUI
+from tkinter import *
 from diffieHellman import diffieHellman
 
 def aplicarHash(n):
@@ -15,6 +17,22 @@ def aplicarHash(n):
 	print("Tamanyo del bloque de salida: " + str(m.digest_size) + " Bytes, "+ str(m.digest_size*8) + " bits.\n")
 	print("El hash obtenido es: " + m.hexdigest())
 	return m.hexdigest()
+
+def imprimirPantalla():
+    print( 'El grupo introducido ha sido el %s' % (n.get()) )
+    return n.get()
+
+def generarInput():
+    ventana = Tk()
+    Label(ventana, text='Grupo con el que operar [15: 3072 bits, 16: 4096 bits, 17: 6144 bits, 18: 8192 bits] ').grid(row=0)
+    global n
+    n = Entry(ventana)
+    n.grid(row=0, column=1)
+    Button(ventana, text='Ejecutar Programa', command=ventana.quit).grid(row=3, column=0, sticky=W, pady=4)
+    Button(ventana, text='Guardar Valor', command=imprimirPantalla).grid(row=3, column=1, sticky=W, pady=4)
+    mainloop()
+    return n.get()
+
 	
 
 def hmac_sha512(clave, mensaje):
@@ -46,10 +64,11 @@ def main():
     # contador del sistema para sincronizar, tiene 8 Bytes aleatorios, 64 bits, como define el RFC de HOTP
     contador = random.getrandbits(64)
     print("El valor del contador es: ", contador,"\n")
-
     # entrada del usuario, que se espera sea un entero
     # en caso de no ser, error y sale
-    n = input("Introduzca el grupo con el que operar [15: 3072 bits, 16: 4096 bits, 17: 6144 bits, 18: 8192 bits]: ")
+
+    n = generarInput()
+    
     print("\n")
     if not n.isdecimal():
     	print("Introduzca un valor numérico la próxima vez")

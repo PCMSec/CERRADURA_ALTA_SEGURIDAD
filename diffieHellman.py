@@ -30,7 +30,7 @@ class diffieHellman:
             return primos[grupo]
         else:   
             print("El grupo introducido no existe, usando el primo por defecto del grupo 15")
-            return primos[15]
+            return primos["15"]
 
     def generarClavePrivada(self, rangoMax):
         """ devuelve la clave privada del usuario,
