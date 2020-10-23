@@ -1,6 +1,6 @@
 #Implementacion de diffie-hellman en Python.
 
-#
+
 #Los grupos con los que se operan están definidos en el RFC 3526
 #[https://tools.ietf.org/html/rfc3526#page-4]
 #Diffie Hellman esta definido tambien en RFC 2631
