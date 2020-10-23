@@ -53,6 +53,7 @@ def calcularHOTP(contador, grupo):
     modulo = int(modulo,16)
     print("Resultado decimal de los Bytes obtenidos:",modulo,"\n")
     print("Últimos 8 dígitos de la contraseña:",modulo // 100,"\n")
+    return modulo // 100
 
 def imprimirPantallaGuardar():
     """Imprime por pantalla el número que se haya introducido por tkinter
@@ -107,7 +108,6 @@ def main():
 
     # genera la pantalla para elegir grupo, guarda en n el valor introducido
     n = generarInput()
-    print("tipo de n:",type(n))
     print("\n")
     if not n.isdecimal():
     	print("Introduzca un valor numérico la próxima vez")
@@ -115,8 +115,8 @@ def main():
 
     # genera todos los parámetros de DH a partir del primo del grupo,
     # los guarda en un objeto de tipo diffieHellman con todos los demás parámetros
-    calcularHOTP(contador, n)
-
+    valorHOTP = calcularHOTP(contador, n)
+    print(valorHOTP)
 
 
 if __name__ == "__main__":
