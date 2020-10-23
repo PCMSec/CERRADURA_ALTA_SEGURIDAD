@@ -8,9 +8,51 @@ import GUI
 from tkinter import *
 from diffieHellman import diffieHellman
 
-def calcularHOTP():
+def calcularHOTP(contador, grupo):
     """método que se encarga de calcular y devolver el HOTP"""
-    pass
+    diffie = diffieHellman(grupo)
+
+    # ¿ambos usuarios presentan la misma clave final?
+    if not diffie.presentarResultados():
+    # No: error y el sistema para
+        print("Los valores finales de Diffie-Hellman no encajan, error en la comunicacion")
+        return -1
+    # Si: el sistema continua
+    resumenHmac = hmac_sha512(diffie.aFinal, contador)
+
+    # 128 caracteres, 64 Bytes en total
+    print("Resumen HMAC resultante: ", resumenHmac,"\n")
+
+    # Coger el último Byte del grupo; por defecto 5f
+    lastByte = resumenHmac[-2:]
+
+    # Imprimir por pantalla el último byte
+    print("Último Byte del HMAC: ",lastByte, "\n") #95
+
+    # lista aux donde guardar los bit del último byte
+    aux = []
+    for byte in lastByte:
+        binary_representation = bin(int(byte,16))
+        print("Representacion binaria de",byte,":", binary_representation, "\n")
+
+        salida = eliminarPrefijo(binary_representation)
+
+        aux.append(salida)
+    final = "".join(aux)
+    print("Binario del último Byte: ",final, "\n")
+    final = int(final,2)
+    final = int(final/2)
+    print("Valor en decimal del grupo de bits:",final*2,"\n")
+    print("Se elige el grupo",final,"\n")
+    #test correcto, comentar
+    #final = 61
+    if final > 60:
+        final = 60
+    modulo = resumenHmac[final*2:final*2+8]
+    print("4 Bytes que nos salen:",modulo,"\n")
+    modulo = int(modulo,16)
+    print("Resultado decimal de los Bytes obtenidos:",modulo,"\n")
+    print("Últimos 8 dígitos de la contraseña:",modulo // 100,"\n")
 
 def imprimirPantallaGuardar():
     """Imprime por pantalla el número que se haya introducido por tkinter
@@ -29,9 +71,7 @@ def generarInput():
     Button(ventana, text='Ejecutar Programa', command=ventana.quit).grid(row=3, column=0, sticky=W, pady=4)
     Button(ventana, text='Guardar Valor', command=imprimirPantallaGuardar).grid(row=3, column=1, sticky=W, pady=4)
     mainloop()
-    return n.get()
-
-	
+    return n.get()	
 
 def hmac_sha512(clave, mensaje):
     """devuelve el hmac con sha512 a partir de
@@ -67,7 +107,7 @@ def main():
 
     # genera la pantalla para elegir grupo, guarda en n el valor introducido
     n = generarInput()
-    
+    print("tipo de n:",type(n))
     print("\n")
     if not n.isdecimal():
     	print("Introduzca un valor numérico la próxima vez")
@@ -75,49 +115,7 @@ def main():
 
     # genera todos los parámetros de DH a partir del primo del grupo,
     # los guarda en un objeto de tipo diffieHellman con todos los demás parámetros
-    diffie = diffieHellman(n)
-
-    # ¿ambos usuarios presentan la misma clave final?
-    if not diffie.presentarResultados():
-    # No: error y el sistema para
-    	print("Los valores finales de Diffie-Hellman no encajan, error en la comunicacion")
-    	return -1
-    # Si: el sistema continua
-    resumenHmac = hmac_sha512(diffie.aFinal, contador)
-
-    # 128 caracteres, 64 Bytes en total
-    print("Resumen HMAC resultante: ", resumenHmac,"\n")
-
-    # Coger el último Byte del grupo; por defecto 5f
-    lastByte = resumenHmac[-2:]
-
-    # Imprimir por pantalla el último byte
-    print("Último Byte del HMAC: ",lastByte, "\n") #95
-
-    # lista aux donde guardar los bit del último byte
-    aux = []
-    for byte in lastByte:
-        binary_representation = bin(int(byte,16))
-        print("Representacion binaria de",byte,":", binary_representation, "\n")
-
-        salida = eliminarPrefijo(binary_representation)
-
-        aux.append(salida)
-    final = "".join(aux)
-    print("Binario del último Byte: ",final, "\n")
-    final = int(final,2)
-    final = int(final/2)
-    print("Valor en decimal del grupo de bits:",final*2,"\n")
-    print("Se elige el grupo",final,"\n")
-    #test correcto, comentar
-    #final = 61
-    if final > 60:
-    	final = 60
-    modulo = resumenHmac[final*2:final*2+8]
-    print("4 Bytes que nos salen:",modulo,"\n")
-    modulo = int(modulo,16)
-    print("Resultado decimal de los Bytes obtenidos:",modulo,"\n")
-    print("Últimos 8 dígitos de la contraseña:",modulo // 100,"\n")
+    calcularHOTP(contador, n)
 
 
 
