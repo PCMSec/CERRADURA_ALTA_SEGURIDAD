@@ -8,28 +8,26 @@ import GUI
 from tkinter import *
 from diffieHellman import diffieHellman
 
-def aplicarHash(n):
-	"""funcion hash manual, TODO si se implementa al final"""
-	print("Calculando el Hash de " + str(n) + "\n")
-	m = hashlib.sha512()
-	cadena = str(n).encode('utf-8')
-	m.update(cadena)
-	print("Tamanyo del bloque de salida: " + str(m.digest_size) + " Bytes, "+ str(m.digest_size*8) + " bits.\n")
-	print("El hash obtenido es: " + m.hexdigest())
-	return m.hexdigest()
+def calcularHOTP():
+    """método que se encarga de calcular y devolver el HOTP"""
+    pass
 
-def imprimirPantalla():
+def imprimirPantallaGuardar():
+    """Imprime por pantalla el número que se haya introducido por tkinter
+    y lo guarda en una variable para usarlo en el futuro"""
     print( 'El grupo introducido ha sido el %s' % (n.get()) )
     return n.get()
 
 def generarInput():
+    """Genera una venta por tkinter para que el usuario introduzca
+    el grupo con el que operar. Botones para guardar y ejecutar el programa"""
     ventana = Tk()
     Label(ventana, text='Grupo con el que operar [15: 3072 bits, 16: 4096 bits, 17: 6144 bits, 18: 8192 bits] ').grid(row=0)
     global n
     n = Entry(ventana)
     n.grid(row=0, column=1)
     Button(ventana, text='Ejecutar Programa', command=ventana.quit).grid(row=3, column=0, sticky=W, pady=4)
-    Button(ventana, text='Guardar Valor', command=imprimirPantalla).grid(row=3, column=1, sticky=W, pady=4)
+    Button(ventana, text='Guardar Valor', command=imprimirPantallaGuardar).grid(row=3, column=1, sticky=W, pady=4)
     mainloop()
     return n.get()
 
@@ -67,6 +65,7 @@ def main():
     # entrada del usuario, que se espera sea un entero
     # en caso de no ser, error y sale
 
+    # genera la pantalla para elegir grupo, guarda en n el valor introducido
     n = generarInput()
     
     print("\n")
