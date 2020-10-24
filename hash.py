@@ -79,6 +79,7 @@ def calcularHOTP(contador, grupo):
     # lista auxiliar donde guardar los bits del último byte
     aux = []
     for byte in lastByte:
+        
         binary_representation = bin(int(byte,16))
         print("Representacion binaria de",byte,":", binary_representation, "\n")
 
@@ -96,13 +97,14 @@ def calcularHOTP(contador, grupo):
     final = int(final,2)
     final = int(final/2)
     print("Valor en decimal del grupo de BITS resultante:",final*2,"\n")
-    print("Se elige el grupo de Bytes",final,"\n")
-
+    
     # Si es un valor superior a 60 (61, 62 o 63), ponemos el final al máximo
     # disponible, que es 60.
-    if final > 60:
-        final = 60
+    while final > 60:
+        print("El grupo",final,"se encuentra fuera del rango de Bytes, que tiene como máximo del 60 al 63","\n")
+        final = final % 60
 
+    print("Se elige el grupo de Bytes",final,"\n")
     # Cogemos el grupo de Bytes calculado antes y los 3 siguientes,
     # hasta disponer de 4 Bytes
     modulo = resumenHmac[final*2:final*2+8]
@@ -155,7 +157,8 @@ def main():
     valorHOTP = calcularHOTP(contador, n)
     print(valorHOTP)
 
-    # TODO: ventana de resincronizacion y elementos similares
+    # TODO: ventana de resincronizacion, usuario desincroniazado,
+    # calcular valor HOTP de ambos, etc
 
 if __name__ == "__main__":
     main()
