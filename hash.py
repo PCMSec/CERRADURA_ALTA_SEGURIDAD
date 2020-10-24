@@ -22,13 +22,23 @@ def generarInput():
     Posee botones para guardar y ejecutar el programa"""
     ventana = Tk()
     Label(ventana, text='Grupo con el que operar [15: 3072 bits, 16: 4096 bits, 17: 6144 bits, 18: 8192 bits] ').grid(row=0)
+    Label(ventana, text='Contador con el que opera el usuario').grid(row=1)
+    Label(ventana, text='Margen de la ventana').grid(row=2)
+
     global n
+    global n1
+    global n2
     n = Entry(ventana)
+    n1 = Entry(ventana)
+    n2 = Entry(ventana)
     n.grid(row=0, column=1)
+    n1.grid(row=1, column=1)
+    n2.grid(row=2, column=1)
     Button(ventana, text='Ejecutar Programa', command=ventana.quit).grid(row=3, column=0, sticky=W, pady=4)
     Button(ventana, text='Guardar Valor', command=imprimirPantallaGuardar).grid(row=3, column=1, sticky=W, pady=4)
     mainloop()
-    return n.get()	
+    return n.get()
+
 
 def hmac_sha512(clave, mensaje):
     """Devuelve el hmac con sha512 a partir de:
@@ -100,7 +110,7 @@ def calcularHOTP(contador, grupo):
     
     # Si es un valor superior a 60 (61, 62 o 63), ponemos el final al máximo
     # disponible, que es 60.
-    
+
     while final > 60:
         print("El grupo",final,"se encuentra fuera del rango de Bytes, que tiene como máximo del 60 al 63","\n")
         final = final - 60
@@ -160,6 +170,9 @@ def main():
 
     # TODO: ventana de resincronizacion, usuario desincroniazado,
     # calcular valor HOTP de ambos, etc
+    contador_usuario = n1.get()
+    ventana = n2.get()
+    print(contador_usuario,ventana)
 
 if __name__ == "__main__":
     main()
