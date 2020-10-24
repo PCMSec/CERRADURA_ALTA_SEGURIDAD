@@ -100,9 +100,10 @@ def calcularHOTP(contador, grupo):
     
     # Si es un valor superior a 60 (61, 62 o 63), ponemos el final al máximo
     # disponible, que es 60.
+    
     while final > 60:
         print("El grupo",final,"se encuentra fuera del rango de Bytes, que tiene como máximo del 60 al 63","\n")
-        final = final % 60
+        final = final - 60
 
     print("Se elige el grupo de Bytes",final,"\n")
     # Cogemos el grupo de Bytes calculado antes y los 3 siguientes,
