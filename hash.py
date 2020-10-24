@@ -13,7 +13,9 @@ from diffieHellman import diffieHellman
 def imprimirPantallaGuardar():
     """Imprime por pantalla el número que se haya introducido por tkinter
     y lo guarda en una variable para usarlo en el futuro"""
-    print( 'El grupo introducido ha sido el %s' % (n.get()) )
+    print("El grupo introducido ha sido el %s" % (n.get()))
+    print("El contador del usuario es %s" % (n1.get()))
+    print("El margen con el que se opera es %s" % (n2.get()))
     return n.get()
 
 def generarInput():
