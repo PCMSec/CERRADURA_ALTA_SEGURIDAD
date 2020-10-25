@@ -52,7 +52,8 @@ class diffieHellman:
         """Print por pantalla para debug de todos los valores: 
         valor privado de a y b,
         valores públicos de cada parte,
-        valor final, que debería ser el mismo para ambos"""
+        valor final, que debería ser el mismo para ambos.
+        Devuelve si a y b generan la misma clave con la que trabajar"""
         print("Valor privado de a: ",self.a,"\n")
         print("Valor privado de b: ",self.b,"\n")
         print("Valor público de a: ",self.A,"\n")
@@ -69,8 +70,8 @@ class diffieHellman:
             return False
 
     def __init__(self, grupo):
-        """ objeto diffie hellman
-        primo: numero primo elegido con el que operar
+        """Objeto diffieHellman, que consta de
+        primo: numero primo elegido con el que operar al inicio de la conexión
         a: clave privada de a
         b: clave privada de b
         A: clave publica de a

@@ -9,6 +9,7 @@ from tkinter import *
 from diffieHellman import diffieHellman
 
 def establecerConexion(grupo):
+    """A partir del grupo del primo, devuelve un objeto diffieHellman."""
     return diffieHellman(grupo)
 
 def imprimirPantallaGuardar():
@@ -149,8 +150,8 @@ def main():
     random.seed(30)
 
     # Contador del sistema para sincronizar, tiene 8 Bytes aleatorios,
-    # como define el RFC de HOTP
-    # sirve como mensaje del que calcular el HMAC a partir de la clave común
+    # como define el RFC de HOTP.
+    # Sirve como mensaje del que calcular el HMAC a partir de la clave común
     contador = random.getrandbits(64)
     print("El valor del contador es: ", contador,"\n")
     
@@ -174,20 +175,26 @@ def main():
     ventana = int(n2.get())
     # Contadores desincronizados, el usuario puede estar adelantado
     valorHOTPcaja = calcularHOTP(contador, n, conexion)
-    if contador_usuario != contador:
-        pass
-    #    for i in range (1,ventana+1):
-    #        valorHOTPusuario = calcularHOTP(contador+1, n)
-    #        if contador_usuario == valorHOTPusuario:
-    #            print("SE CONSIGUE")
-    #            break
+
+    # solo el contador del usuario puede estar adelantado
+    if contador_usuario >= contador:
+        # Dejamos el valor del usuario parado, aumentamos la caja
+        valorHOTPusuario = calcularHOTP(contador_usuario, n, conexion)
+        for i in range (1,ventana+1):
+            print("Valor de la ventana",i)
+            valorHOTPcaja = calcularHOTP(contador+i, n, conexion)
+            if valorHOTPcaja == valorHOTPusuario:
+                print("SE CONSIGUE")
+                return 0
+        print("NO SE CONSIGUE")
+        return -1
     # Los contadores son iguales, no hay problema
     else:
         print("Los contadores de ambos son iguales, calculando HOTP para ambos\n")
         valorHOTPusuario = calcularHOTP(contador_usuario, n, conexion)
         
         print(valorHOTPcaja == valorHOTPusuario)
-
+        return 0
 
     # TODO: ventana de resincronizacion, usuario desincroniazado,
     # calcular valor HOTP de ambos, etc
