@@ -177,7 +177,9 @@ def main():
     valorHOTPcaja = calcularHOTP(contador, n, conexion)
 
     # solo el contador del usuario puede estar adelantado
-    if contador_usuario >= contador:
+    print("QUE",contador_usuario)
+    print("COJONES",contador)
+    if contador_usuario > contador:
         # Dejamos el valor del usuario parado, aumentamos la caja
         valorHOTPusuario = calcularHOTP(contador_usuario, n, conexion)
         for i in range (1,ventana+1):
