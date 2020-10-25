@@ -5,11 +5,13 @@ import hashlib
 import random
 import hmac
 import sys
+import os
 from tkinter import *
 from diffieHellman import diffieHellman
 
 def establecerConexion(grupo):
-    """A partir del grupo del primo, devuelve un objeto diffieHellman."""
+    """A partir del grupo del primo, devuelve un objeto diffieHellman
+    con el que comunicar entre ambos."""
     return diffieHellman(grupo)
 
 def imprimirPantallaGuardar():
@@ -33,12 +35,15 @@ def generarInput():
     global n
     global n1
     global n2
+
     n = Entry(ventana)
     n1 = Entry(ventana)
     n2 = Entry(ventana)
+
     n.grid(row=0, column=1)
     n1.grid(row=1, column=1)
     n2.grid(row=2, column=1)
+
     Button(ventana, text='Ejecutar Programa', command=ventana.quit).grid(row=3, column=0, sticky=W, pady=4)
     Button(ventana, text='Guardar Valor', command=imprimirPantallaGuardar).grid(row=3, column=1, sticky=W, pady=4)
     mainloop()
@@ -149,10 +154,29 @@ def main():
 	# Semilla definida en cada inicio para obtener resultados consistentes = 30
     random.seed(30)
 
+    if not os.path.exists('mensajes.txt'):
+            os.mknod('mensajes.txt')
     # Contador del sistema para sincronizar, tiene 8 Bytes aleatorios,
     # como define el RFC de HOTP.
     # Sirve como mensaje del que calcular el HMAC a partir de la clave común
     contador = random.getrandbits(64)
+    archivo = open('mensajes.txt', 'r') 
+    lineas = archivo.readlines() 
+
+    for linea in lineas:
+        print(linea)
+        print(type(linea))
+        print(contador)
+        print(type(contador))
+        print(contador)
+        if contador == int(linea):
+            print("UEEEEE")
+            contador = random.getrandbits(64)
+
+    f=open("mensajes.txt", "a+")
+    f.write(str(contador))
+    f.write("\n")
+    f.close()
     print("El valor del contador es: ", contador,"\n")
     
     # entrada del usuario, que se espera sea un entero
@@ -177,8 +201,6 @@ def main():
     valorHOTPcaja = calcularHOTP(contador, n, conexion)
 
     # solo el contador del usuario puede estar adelantado
-    print("QUE",contador_usuario)
-    print("COJONES",contador)
     if contador_usuario > contador:
         # Dejamos el valor del usuario parado, aumentamos la caja
         valorHOTPusuario = calcularHOTP(contador_usuario, n, conexion)
@@ -198,8 +220,7 @@ def main():
         print(valorHOTPcaja == valorHOTPusuario)
         return 0
 
-    # TODO: ventana de resincronizacion, usuario desincroniazado,
-    # calcular valor HOTP de ambos, etc
+    
     
 
 if __name__ == "__main__":
