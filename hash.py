@@ -167,14 +167,28 @@ def main():
 
     # Genera todos los parámetros de DH a partir del primo del grupo,
     # los guarda en un objeto de tipo diffieHellman con todos los demás parámetros
-    valorHOTP = calcularHOTP(contador, n)
-    print(valorHOTP)
+    contador_usuario = int(n1.get())
+    ventana = int(n2.get())
+    # Contadores desincronizados, el usuario puede estar adelantado
+    valorHOTPcaja = calcularHOTP(contador, n)
+    if contador_usuario != contador:
+        pass
+    #    for i in range (1,ventana+1):
+    #        valorHOTPusuario = calcularHOTP(contador+1, n)
+    #        if contador_usuario == valorHOTPusuario:
+    #            print("SE CONSIGUE")
+    #            break
+    # Los contadores son iguales, no hay problema
+    else:
+        print("Los contadores de ambos son iguales, calculando HOTP para ambos\n")
+        valorHOTPusuario = calcularHOTP(contador_usuario, n)
+        
+        print(valorHOTPcaja == valorHOTPusuario)
+
 
     # TODO: ventana de resincronizacion, usuario desincroniazado,
     # calcular valor HOTP de ambos, etc
-    contador_usuario = n1.get()
-    ventana = n2.get()
-    print(contador_usuario,ventana)
+    
 
 if __name__ == "__main__":
     main()

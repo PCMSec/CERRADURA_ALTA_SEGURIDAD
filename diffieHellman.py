@@ -34,6 +34,7 @@ class diffieHellman:
             return primos["15"]
 
     def generarClavePrivada(self, rangoMax):
+        random.seed(30)
         """Devuelve la clave privada de cualquiera de las dos partes,
         un numero secreto desde 1 al primo elegido - 1, el rango máximo"""
         return random.randint(1, rangoMax - 1)
