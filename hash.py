@@ -8,7 +8,8 @@ import sys
 from tkinter import *
 from diffieHellman import diffieHellman
 
-
+def establecerConexion(grupo):
+    return diffieHellman(grupo)
 
 def imprimirPantallaGuardar():
     """Imprime por pantalla el número que se haya introducido por tkinter
@@ -17,6 +18,7 @@ def imprimirPantallaGuardar():
     print("El contador del usuario es %s" % (n1.get()))
     print("El margen con el que se opera es %s" % (n2.get()))
     return n.get()
+
 
 def generarInput():
     """Genera una ventana por tkinter para que el usuario introduzca
@@ -65,11 +67,9 @@ def eliminarPrefijo(stringNumero):
 	if stringNumero.startswith(prefijo):
 		return stringNumero[len(prefijo):]
 
-def calcularHOTP(contador, grupo):
+def calcularHOTP(contador, grupo, diffie):
     """Método que se encarga de calcular y devolver el HOTP"""
     # Guardamos un objeto con los parámetros a partir del grupo del primo elegido
-    diffie = diffieHellman(grupo)
-
     # ¿Ambos usuarios presentan la misma clave final?
     if not diffie.presentarResultados():
     # No: error y el sistema para
@@ -164,13 +164,16 @@ def main():
     if not n.isdecimal():
     	print("Introduzca un valor numérico la próxima vez")
     	return -1
+    # Establecer conexion inicial a partir de un objeto diffieHellman
+    # se usa el grupo anterior
+    conexion = establecerConexion(n)
 
     # Genera todos los parámetros de DH a partir del primo del grupo,
     # los guarda en un objeto de tipo diffieHellman con todos los demás parámetros
     contador_usuario = int(n1.get())
     ventana = int(n2.get())
     # Contadores desincronizados, el usuario puede estar adelantado
-    valorHOTPcaja = calcularHOTP(contador, n)
+    valorHOTPcaja = calcularHOTP(contador, n, conexion)
     if contador_usuario != contador:
         pass
     #    for i in range (1,ventana+1):
@@ -181,7 +184,7 @@ def main():
     # Los contadores son iguales, no hay problema
     else:
         print("Los contadores de ambos son iguales, calculando HOTP para ambos\n")
-        valorHOTPusuario = calcularHOTP(contador_usuario, n)
+        valorHOTPusuario = calcularHOTP(contador_usuario, n, conexion)
         
         print(valorHOTPcaja == valorHOTPusuario)
 
