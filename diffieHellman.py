@@ -7,6 +7,8 @@
 #[https://tools.ietf.org/html/rfc2631]
 
 import random
+import os
+import csv
 
 class diffieHellman:
     
@@ -34,10 +36,26 @@ class diffieHellman:
             return primos["15"]
 
     def generarClavePrivada(self, rangoMax):
+    	# Semilla estática para obtener resultados iguales tras varios usos,
+    	# conviene quitarla cuando se use de verdad
         random.seed(30)
+        if not os.path.exists('claves.txt'):
+            os.mknod('claves.txt')
         """Devuelve la clave privada de cualquiera de las dos partes,
         un numero secreto desde 1 al primo elegido - 1, el rango máximo"""
-        return random.randint(1, rangoMax - 1)
+        claveLocal = random.randint(1, rangoMax - 1)
+        # Abrir el fichero de claves
+        archivo = open('claves.txt', 'r') 
+        lineas = archivo.readlines()
+        for linea in lineas:
+        	if claveLocal == int(linea):
+        		claveLocal = random.randint(1, rangoMax - 1)
+
+        f=open("claves.txt", "a+")
+        f.write(str(claveLocal))
+        f.write("\n")
+        f.close()
+        return claveLocal
 
     def generarClavePublica(self, valorPrivado, primo):
         """Genera la clave pública a intercambiar, de la forma: 
@@ -54,12 +72,12 @@ class diffieHellman:
         valores públicos de cada parte,
         valor final, que debería ser el mismo para ambos.
         Devuelve si a y b generan la misma clave con la que trabajar"""
-        print("Valor privado de a: ",self.a,"\n")
-        print("Valor privado de b: ",self.b,"\n")
-        print("Valor público de a: ",self.A,"\n")
-        print("Valor público de b: ",self.B,"\n")
-        print("Valor de la clave para a: ",self.aFinal,"\n")
-        print("Valor de la clave para b: ",self.bFinal,"\n")
+        #print("Valor privado de a: ",self.a,"\n")
+        #print("Valor privado de b: ",self.b,"\n")
+        #print("Valor público de a: ",self.A,"\n")
+        #print("Valor público de b: ",self.B,"\n")
+        #print("Valor de la clave para a: ",self.aFinal,"\n")
+        #print("Valor de la clave para b: ",self.bFinal,"\n")
         # Si es el mismo valor, acierto
         if self.aFinal == self.bFinal:
             print("Los valores son iguales, comparten la misma clave","\n")
@@ -88,5 +106,4 @@ class diffieHellman:
         self.B = self.generarClavePublica(self.b, self.primo)
         self.aFinal = pow(self.B, self.a, self.primo)
         self.bFinal = pow(self.A, self.b, self.primo)
-        
 

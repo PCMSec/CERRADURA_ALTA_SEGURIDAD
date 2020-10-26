@@ -163,14 +163,9 @@ def main():
     archivo = open('mensajes.txt', 'r') 
     lineas = archivo.readlines() 
 
+    # Ya funciona, repasar diffie hellman
     for linea in lineas:
-        print(linea)
-        print(type(linea))
-        print(contador)
-        print(type(contador))
-        print(contador)
         if contador == int(linea):
-            print("UEEEEE")
             contador = random.getrandbits(64)
 
     f=open("mensajes.txt", "a+")
