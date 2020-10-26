@@ -203,16 +203,19 @@ def main():
             print("Valor de la ventana",i)
             valorHOTPcaja = calcularHOTP(contador+i, n, conexion)
             if valorHOTPcaja == valorHOTPusuario:
-                print("SE CONSIGUE")
+                print("Para el contador de la caja",str(contador+i),"el sistema encuentra un mismo valor HOTP")
                 return 0
         print("NO SE CONSIGUE")
         return -1
     # Los contadores son iguales, no hay problema
+    elif contador_usuario < contador:
+        print("CASO NO POSIBLE; ERROR")
+        return -1
     else:
         print("Los contadores de ambos son iguales, calculando HOTP para ambos\n")
         valorHOTPusuario = calcularHOTP(contador_usuario, n, conexion)
-        
-        print(valorHOTPcaja == valorHOTPusuario)
+        if valorHOTPcaja == valorHOTPusuario:
+            print("Los valores coinciden, se da acceso")
         return 0
 
     

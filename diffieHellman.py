@@ -72,12 +72,12 @@ class diffieHellman:
         valores públicos de cada parte,
         valor final, que debería ser el mismo para ambos.
         Devuelve si a y b generan la misma clave con la que trabajar"""
-        #print("Valor privado de a: ",self.a,"\n")
-        #print("Valor privado de b: ",self.b,"\n")
-        #print("Valor público de a: ",self.A,"\n")
-        #print("Valor público de b: ",self.B,"\n")
-        #print("Valor de la clave para a: ",self.aFinal,"\n")
-        #print("Valor de la clave para b: ",self.bFinal,"\n")
+        print("Valor privado de a: ",self.a,"\n")
+        print("Valor privado de b: ",self.b,"\n")
+        print("Valor público de a: ",self.A,"\n")
+        print("Valor público de b: ",self.B,"\n")
+        print("Valor de la clave para a: ",self.aFinal,"\n")
+        print("Valor de la clave para b: ",self.bFinal,"\n")
         # Si es el mismo valor, acierto
         if self.aFinal == self.bFinal:
             print("Los valores son iguales, comparten la misma clave","\n")
