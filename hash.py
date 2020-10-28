@@ -199,13 +199,16 @@ def main():
     if contador_usuario > contador:
         # Dejamos el valor del usuario parado, aumentamos la caja
         valorHOTPusuario = calcularHOTP(contador_usuario, n, conexion)
+        print("EL CONTADOR DEL USUARIO ESTÁ ADELANTADO. EL VALOR HOTP DEL USUARIO ES",valorHOTPusuario)
         for i in range (1,ventana+1):
             print("Valor de la ventana",i)
             valorHOTPcaja = calcularHOTP(contador+i, n, conexion)
             if valorHOTPcaja == valorHOTPusuario:
-                print("Para el contador de la caja",str(contador+i),"el sistema encuentra un mismo valor HOTP")
+                print("PARA EL CONTADOR DE LA CAJA",str(contador+i),"EL SISTEMA ENCUENTRA EL MISMO VALOR HOTP")
+                print("VALOR DEL USUARIO:",valorHOTPusuario)
+                print("VALOR DE LA CAJA FUERTE:",valorHOTPcaja)
                 return 0
-        print("NO SE CONSIGUE")
+        print("NO SE CONSIGUE GENERAR LA CONTRASEÑA")
         return -1
     # Los contadores son iguales, no hay problema
     elif contador_usuario < contador:
