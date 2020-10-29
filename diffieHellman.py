@@ -1,6 +1,4 @@
 #Implementacion de diffie-hellman en Python.
-
-
 #Los grupos de primos con los que se opera están definidos en el RFC 3526
 #[https://tools.ietf.org/html/rfc3526#page-4]
 #Diffie Hellman esta definido tambien en RFC 2631
@@ -67,6 +65,7 @@ class diffieHellman:
         return pow(2, valorPrivado, primo)
 
     def conexionCorrecta(self):
+        """Devuelve si la conexión es correcta; si los valores finales son iguales"""
         if self.aFinal == self.bFinal:
             print("Los valores son iguales, comparten la misma clave","\n")
             return True
