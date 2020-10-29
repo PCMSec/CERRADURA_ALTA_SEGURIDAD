@@ -66,6 +66,15 @@ class diffieHellman:
         p el primo usado"""
         return pow(2, valorPrivado, primo)
 
+    def conexionCorrecta(self):
+        if self.aFinal == self.bFinal:
+            print("Los valores son iguales, comparten la misma clave","\n")
+            return True
+        # Si es distinto, la comunicación se acaba
+        else:
+            print("Los valores difieren, error","\n")
+            return False
+
     def presentarResultados(self):
         """Print por pantalla para debug de todos los valores: 
         valor privado de a y b,
@@ -79,13 +88,7 @@ class diffieHellman:
         print("Valor de la clave para a: ",self.aFinal,"\n")
         print("Valor de la clave para b: ",self.bFinal,"\n")
         # Si es el mismo valor, acierto
-        if self.aFinal == self.bFinal:
-            print("Los valores son iguales, comparten la misma clave","\n")
-            return True
-        # Si es distinto, la comunicación se acaba
-        else:
-            print("Los valores difieren, error","\n")
-            return False
+        
 
     def __init__(self, grupo):
         """Objeto diffieHellman, que consta de

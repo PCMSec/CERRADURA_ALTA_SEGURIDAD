@@ -77,7 +77,7 @@ def calcularHOTP(contador, grupo, diffie):
     """Método que se encarga de calcular y devolver el HOTP"""
     # Guardamos un objeto con los parámetros a partir del grupo del primo elegido
     # ¿Ambos usuarios presentan la misma clave final?
-    if not diffie.presentarResultados():
+    if not diffie.conexionCorrecta():
     # No: error y el sistema para
         print("Los valores finales de Diffie-Hellman no encajan, error en la comunicacion")
         return -1
@@ -146,7 +146,7 @@ def calcularHOTP(contador, grupo, diffie):
 
     # Se devuelve el valor de la contraseña en común entre usuario
     # y caja fuerte.
-    print("Últimos 8 dígitos de la contraseña:",modulo,"\n")
+    print("Primeros 8 dígitos de la contraseña:",modulo,"\n")
     return modulo
 
 
@@ -187,6 +187,7 @@ def main():
     # Establecer conexion inicial a partir de un objeto diffieHellman
     # se usa el grupo anterior
     conexion = establecerConexion(n)
+    conexion.presentarResultados()
 
     # Genera todos los parámetros de DH a partir del primo del grupo,
     # los guarda en un objeto de tipo diffieHellman con todos los demás parámetros
