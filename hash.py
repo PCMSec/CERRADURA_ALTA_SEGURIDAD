@@ -20,6 +20,7 @@ def imprimirPantallaGuardar():
     print("El grupo introducido ha sido el %s" % (n.get()))
     print("El contador del usuario es %s" % (n1.get()))
     print("El margen con el que se opera es %s" % (n2.get()))
+    print("El ID del usuario es %s" % (n3.get()))
     return n.get()
 
 
@@ -31,21 +32,25 @@ def generarInput():
     Label(ventana, text='Grupo con el que operar [15: 3072 bits, 16: 4096 bits, 17: 6144 bits, 18: 8192 bits] ').grid(row=0)
     Label(ventana, text='Contador con el que opera el usuario').grid(row=1)
     Label(ventana, text='Margen de la ventana').grid(row=2)
+    Label(ventana, text='ID del usuario').grid(row=3)
 
     global n
     global n1
     global n2
+    global n3
 
     n = Entry(ventana)
     n1 = Entry(ventana)
     n2 = Entry(ventana)
+    n3 = Entry(ventana)
 
     n.grid(row=0, column=1)
     n1.grid(row=1, column=1)
     n2.grid(row=2, column=1)
+    n3.grid(row=3, column=1)
 
-    Button(ventana, text='Ejecutar Programa', command=ventana.quit).grid(row=3, column=0, sticky=W, pady=4)
-    Button(ventana, text='Guardar Valor', command=imprimirPantallaGuardar).grid(row=3, column=1, sticky=W, pady=4)
+    Button(ventana, text='Ejecutar Programa', command=ventana.quit).grid(row=4, column=0, sticky=W, pady=4)
+    Button(ventana, text='Guardar Valor', command=imprimirPantallaGuardar).grid(row=4, column=1, sticky=W, pady=4)
     mainloop()
     return n.get()
 
@@ -180,6 +185,20 @@ def main():
     n = generarInput()
     print("\n")
     
+    # Abrir el archivo con los ID's de los usuarios
+    archivo_usuario = open('usuarios.txt', 'r') 
+    lineas = archivo_usuario.readlines() 
+    aux = False
+    # Comparar el id del usuario para ver que el usuario tiene los permisos necesarios
+    for linea in lineas:
+        if int(n3.get()) == int(linea):
+        	aux = True
+    # Si no los tiene, error y return -1
+    if not aux:
+    	print("ERROR; El usuario no tiene permisos")
+    	return -1
+    # Continúa de manera normal de lo contrario
+
     # El valor no es numérico y devuelve un error
     if not n.isdecimal():
     	print("Introduzca un valor numérico la próxima vez")
