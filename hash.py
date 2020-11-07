@@ -156,7 +156,7 @@ def calcularHOTP(contador, grupo, diffie):
 
 
 def main():
-	# Semilla definida en cada inicio para obtener resultados consistentes = 30
+	# Semilla/Seed definida en cada inicio para obtener resultados consistentes = 30
     random.seed(30)
 
     if not os.path.exists('mensajes.txt'):
@@ -186,14 +186,17 @@ def main():
     print("\n")
     
     # Abrir el archivo con los ID's de los usuarios
+
     archivo_usuario = open('usuarios.txt', 'r') 
     lineas = archivo_usuario.readlines() 
     aux = False
-    # Comparar el id del usuario para ver que el usuario tiene los permisos necesarios
+    # Comparar el id del usuario para ver que el usuario tiene los permisos necesarios.
+    # Se compara contra cada línea del archivo
     for linea in lineas:
         if int(n3.get()) == int(linea):
         	aux = True
     # Si no los tiene, error y return -1
+
     if not aux:
     	print("ERROR; El usuario no tiene permisos")
     	return -1
