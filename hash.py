@@ -222,16 +222,30 @@ def main():
     # Contadores desincronizados, el usuario puede estar adelantado
     valorHOTPcaja = calcularHOTP(contador, n, conexion)
 
-    # solo el contador del usuario puede estar adelantado
-    if contador_usuario > contador:
-        # Dejamos el valor del usuario parado, aumentamos la caja
+    # Atencion, el usuario actual puede estar por detrás en sus aleatorios que el usuario anterior
+    if contador_usuario != contador:
+        # Dejamos el valor del usuario parado, la caja es la que va cambiando
         valorHOTPusuario = calcularHOTP(contador_usuario, n, conexion)
-        print("EL CONTADOR DEL USUARIO ESTÁ ADELANTADO. EL VALOR HOTP DEL USUARIO ES",valorHOTPusuario)
-        for i in range (1,ventana+1):
-            print("Valor de la ventana",i)
-            valorHOTPcaja = calcularHOTP(contador+i, n, conexion)
+        print("EL CONTADOR DEL USUARIO NO ENCAJA. EL VALOR HOTP DEL USUARIO ES",valorHOTPusuario)
+        # Leer el archivo de mensajes aleatorios a partir de la seed de antes
+        f = open("mensajes.txt", "r")
+        # Leer todas las lineas menos la ultima porque no nos interesa el nuevo valor
+        lines = f.readlines()
+        f.close()
+        lines = lines[:-1]
+        f = open("mensajes.txt", "w")
+        for linea in lines:
+        	f.write(linea)
+        f.close()
+        # Coger los últimos VENTANA valores del archivo, sin contar el generado para esta ejecución
+        for aleatorio in lines[-ventana:]:
+        	# Print del valor con el que se operra
+            print("Calculando HOTP para valor del contador",aleatorio)
+            # Re-calcular el valor HOTP de la caja con el aleatorio
+            valorHOTPcaja = calcularHOTP(int(aleatorio), n, conexion)
+            # Si coinciden, se hace print de toda la info y se termina
             if valorHOTPcaja == valorHOTPusuario:
-                print("PARA EL CONTADOR DE LA CAJA",str(contador+i),"EL SISTEMA ENCUENTRA EL MISMO VALOR HOTP")
+                print("PARA EL CONTADOR DE LA CAJA",aleatorio,"EL SISTEMA ENCUENTRA EL MISMO VALOR HOTP")
                 print("VALOR DEL USUARIO:",valorHOTPusuario)
                 print("VALOR DE LA CAJA FUERTE:",valorHOTPcaja)
                 board.digital[13].write(1)
@@ -241,9 +255,6 @@ def main():
         print("NO SE CONSIGUE GENERAR LA CONTRASEÑA")
         return -1
     # Los contadores son iguales, no hay problema
-    elif contador_usuario < contador:
-        print("CASO NO POSIBLE; ERROR")
-        return -1
     else:
         print("Los contadores de ambos son iguales, calculando HOTP para ambos\n")
         valorHOTPusuario = calcularHOTP(contador_usuario, n, conexion)
