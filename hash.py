@@ -245,7 +245,7 @@ def main():
             valorHOTPcaja = calcularHOTP(int(aleatorio), n, conexion)
             # Si coinciden, se hace print de toda la info y se termina
             if valorHOTPcaja == valorHOTPusuario:
-                print("PARA EL CONTADOR DE LA CAJA",aleatorio,"EL SISTEMA ENCUENTRA EL MISMO VALOR HOTP")
+                print("EL SISTEMA ENCUENTRA EL MISMO VALOR HOTP PARA EL CONTADOR GENERADO ANTES EN LA CAJA", aleatorio)
                 print("VALOR DEL USUARIO:",valorHOTPusuario)
                 print("VALOR DE LA CAJA FUERTE:",valorHOTPcaja)
                 board.digital[13].write(1)
