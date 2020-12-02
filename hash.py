@@ -107,7 +107,7 @@ def calcularHOTP(contador, grupo, diffie):
     aux = []
     for byte in lastByte:
         
-        binary_representation = bin(int(byte,16))
+        binary_representation = format(int(byte,16), '#06b')
         print("Representacion binaria de",byte,":", binary_representation, "\n")
 
         salida = eliminarPrefijo(binary_representation)
