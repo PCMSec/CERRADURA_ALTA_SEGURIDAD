@@ -9,9 +9,9 @@ import os
 import time
 from tkinter import *
 from diffieHellman import diffieHellman
-import pyfirmata
+# import pyfirmata
 
-board = pyfirmata.Arduino('/dev/ttyACM0')
+# board = pyfirmata.Arduino('/dev/ttyACM0')
 
 def establecerConexion(grupo):
     """A partir del grupo del primo, devuelve un objeto diffieHellman
@@ -248,9 +248,9 @@ def main():
                 print("EL SISTEMA ENCUENTRA EL MISMO VALOR HOTP PARA EL CONTADOR GENERADO ANTES EN LA CAJA", aleatorio)
                 print("VALOR DEL USUARIO:",valorHOTPusuario)
                 print("VALOR DE LA CAJA FUERTE:",valorHOTPcaja)
-                board.digital[13].write(1)
-                time.sleep(10)
-                board.digital[13].write(0)
+                # board.digital[13].write(1)
+                # time.sleep(10)
+                # board.digital[13].write(0)
                 return 0
         print("NO SE CONSIGUE GENERAR LA CONTRASEÑA")
         return -1
@@ -260,9 +260,9 @@ def main():
         valorHOTPusuario = calcularHOTP(contador_usuario, n, conexion)
         if valorHOTPcaja == valorHOTPusuario:
             print("Los valores coinciden, se da acceso")
-            board.digital[13].write(1)
-            time.sleep(10)
-            board.digital[13].write(0)
+            # board.digital[13].write(1)
+            # time.sleep(10)
+            # board.digital[13].write(0)
         return 0
 
     
